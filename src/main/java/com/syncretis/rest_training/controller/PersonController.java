@@ -1,13 +1,11 @@
 package com.syncretis.rest_training.controller;
 
 import com.syncretis.rest_training.dto.PersonDto;
-import com.syncretis.rest_training.model.Person;
 import com.syncretis.rest_training.service.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController

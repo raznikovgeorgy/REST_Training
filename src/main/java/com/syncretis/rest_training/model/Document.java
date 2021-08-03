@@ -3,7 +3,6 @@ package com.syncretis.rest_training.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -22,7 +21,6 @@ import java.time.LocalDate;
                 columnNames = {"id"}
         )
 )
-@ToString
 public class Document {
 
     @Column(name = "id")
@@ -34,6 +32,18 @@ public class Document {
     @Column(name = "expireDate", nullable = false)
     @NotNull(message = "Expire date cannot be null")
     private LocalDate expireDate;
+
+    @OneToOne(mappedBy = "document")
+    private Person person;
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "id='" + id + '\'' +
+                ", expireDate=" + expireDate +
+                ", pid=" + person.getId() +
+                '}';
+    }
 
     public Document(String id, LocalDate expireDate) {
         this.id = id;

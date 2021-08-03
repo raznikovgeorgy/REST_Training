@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -17,7 +18,7 @@ public class PersonDto {
     private String name;
     private String surname;
     private LocalDate birthday;
-    private DepartmentDto department;
-    private DocumentDto document;
-    private LanguageDto languages;
+    private Long department_id;
+    private String document_id;
+    private List<Long> languageIds;
 }

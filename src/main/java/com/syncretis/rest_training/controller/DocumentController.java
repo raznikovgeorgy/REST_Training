@@ -1,13 +1,11 @@
 package com.syncretis.rest_training.controller;
 
 import com.syncretis.rest_training.dto.DocumentDto;
-import com.syncretis.rest_training.model.Document;
 import com.syncretis.rest_training.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
