@@ -33,7 +33,7 @@ public class Document {
     @NotNull(message = "Expire date cannot be null")
     private LocalDate expireDate;
 
-    @OneToOne(mappedBy = "document", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "document", fetch = FetchType.EAGER)
     private Person person;
 
     @Override
