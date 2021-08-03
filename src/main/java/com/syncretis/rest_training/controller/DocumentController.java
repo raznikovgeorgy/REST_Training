@@ -12,32 +12,33 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @RestController
+@RequestMapping("/api/documents")
 public class DocumentController {
 
     private final DocumentService service;
 
-    @GetMapping("/documents")
+    @GetMapping("/")
     @ResponseBody
     public List<DocumentDto> all() {
         return service.findAll();
     }
 
-    @PostMapping("/documents")
+    @PostMapping("")
     DocumentDto newDocument(@Valid @RequestBody DocumentDto newDocument) {
         return service.save(newDocument);
     }
 
-    @GetMapping("/documents/{id}")
+    @GetMapping("/{id}")
     DocumentDto one(@Valid @PathVariable String id) {
         return service.get(id);
     }
 
-    @PutMapping("/documents/{id}")
+    @PutMapping("/{id}")
     DocumentDto replaceDocument(@Valid @RequestBody DocumentDto newDocument, @Valid @PathVariable String id) {
         return service.update(id, newDocument);
     }
 
-    @DeleteMapping("/documents/{id}")
+    @DeleteMapping("/{id}")
     void deleteDocument(@Valid @PathVariable String id) {
         service.delete(id);
     }

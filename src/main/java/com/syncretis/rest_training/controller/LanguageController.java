@@ -13,32 +13,33 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @RestController
+@RequestMapping("/api/languages")
 public class LanguageController {
 
     private final LanguageService service;
 
-    @GetMapping("/languages")
+    @GetMapping("")
     @ResponseBody
     public List<LanguageDto> all() {
         return service.findAll();
     }
 
-    @PostMapping("/languages")
+    @PostMapping("")
     LanguageDto newDocument(@Valid @RequestBody LanguageDto newLanguage) {
         return service.save(newLanguage);
     }
 
-    @GetMapping("/languages/{id}")
+    @GetMapping("/{id}")
     LanguageDto one(@PathVariable @Min(1) Long id) {
         return service.get(id);
     }
 
-    @PutMapping("/languages/{id}")
+    @PutMapping("/{id}")
     LanguageDto replaceDocument(@Valid @RequestBody LanguageDto newLanguage, @PathVariable @Min(1) Long id) {
         return service.update(id, newLanguage);
     }
 
-    @DeleteMapping("/languages/{id}")
+    @DeleteMapping("/{id}")
     void deleteDocument(@PathVariable @Min(1) Long id) {
         service.delete(id);
     }

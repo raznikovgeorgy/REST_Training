@@ -1,17 +1,14 @@
 package com.syncretis.rest_training.service;
 
 import com.syncretis.rest_training.dto.PersonDto;
-import com.syncretis.rest_training.exception.DepartmentNotFoundException;
-import com.syncretis.rest_training.exception.personException.PersonNotFoundException;
-import com.syncretis.rest_training.exception.personException.YearBirthdayInvalidException;
+import com.syncretis.rest_training.exception.person.PersonNotFoundException;
+import com.syncretis.rest_training.exception.person.YearOfBirthdayInvalidException;
 import com.syncretis.rest_training.mapper.PersonMapper;
 import com.syncretis.rest_training.model.Person;
 import com.syncretis.rest_training.repository.PersonRepository;
-import com.syncretis.rest_training.validation.personDtoValidation.YearBirthdayValidator;
+import com.syncretis.rest_training.validation.personDtoValidation.PersonValidator;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.DataBinder;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -25,13 +22,11 @@ import java.util.stream.Collectors;
 public class PersonService {
 
     private PersonRepository personRepository;
-
     private PersonMapper personMapper;
-    @Autowired
-    private YearBirthdayValidator yearBirthdayValidator;
+    private PersonValidator validator;
 
     public void delete(@Min(1) Long id) {
-        if (id == null || isExist(id)) {
+        if (id == null || !isExist(id)) {
             throw new PersonNotFoundException(id);
         } else {
             personRepository.deleteById(id);
@@ -39,6 +34,10 @@ public class PersonService {
     }
 
     public void deleteAll(List<PersonDto> list) {
+        for (PersonDto dto : list) {
+            if (dto.getId() != null && !isExist(dto.getId()))
+                throw new PersonNotFoundException(dto.getId(), "\nOperation was aborted");
+        }
         personRepository.deleteAllInBatch(list.stream()
                 .map(this::convertToEntity)
                 .collect(Collectors.toList()));
@@ -57,47 +56,36 @@ public class PersonService {
     }
 
     public PersonDto save(@Valid PersonDto dto) {
-        if(dto.getBirthday().getYear() < 1900) {
-            throw new YearBirthdayInvalidException();
+        if (dto.getBirthday().getYear() < 1900) {
+            throw new YearOfBirthdayInvalidException();
         } else
-        return convertToDto(personRepository.save(convertToEntity(dto)));
+            return convertToDto(personRepository.save(convertToEntity(dto)));
     }
 
     public List<PersonDto> saveAll(List<PersonDto> list) {
-        for (PersonDto personDto : list) {
-            if(!isExist(personDto.getId())) {
-                throw new PersonNotFoundException(personDto.getId());
-            }
-        }
-        List<Person> persons = personRepository.saveAll(list.stream()
-                .map(this::convertToEntity)
-                .collect(Collectors.toList()));
-        return persons.stream()
+        return personRepository.saveAll(list.stream()
+                        .map(this::convertToEntity)
+                        .collect(Collectors.toList())).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     public PersonDto update(@Min(1) Long id, @Valid PersonDto dto) {
         dto.setId(id);
-        DataBinder dataBinder = new DataBinder(dto);
-        dataBinder.addValidators(yearBirthdayValidator);
-        dataBinder.validate();
-        if(dataBinder.getBindingResult().hasErrors()) {
-            throw new YearBirthdayInvalidException();
-        }
+        if (!validator.validate(dto))
+            throw new YearOfBirthdayInvalidException();
         return convertToDto(personRepository.save(convertToEntity(dto)));
     }
 
     public PersonDto convertToDto(Person p) {
-        return personMapper.convert(p);
+        return personMapper.convertToDto(p);
     }
 
     public Person convertToEntity(PersonDto dto) {
-        return personMapper.convert(dto);
+        return personMapper.convertToEntity(dto);
     }
 
-    public boolean isExist(Long id) {
+    private boolean isExist(Long id) {
         return personRepository.existsById(id);
     }
-
 }

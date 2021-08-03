@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class DocumentMapper {
 
-    public Document convert(DocumentDto dto) {
+    public Document convertToEntity(DocumentDto dto) {
         Document result = new Document();
         result.setId(dto.getId());
         result.setExpireDate(dto.getExpireDate());
         return result;
     }
 
-    public DocumentDto convert(Document doc) {
+    public DocumentDto convertToDto(Document doc) {
         DocumentDto result = new DocumentDto();
         result.setId(doc.getId());
         result.setExpireDate(doc.getExpireDate());

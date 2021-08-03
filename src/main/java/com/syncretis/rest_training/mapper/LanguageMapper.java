@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class LanguageMapper {
 
-    public Language convert(LanguageDto dto) {
+    public Language convertToEntity(LanguageDto dto) {
         Language result = new Language();
         result.setId(dto.getId());
         result.setName(dto.getName());
         return result;
     }
 
-    public LanguageDto convert(Language lang) {
+    public LanguageDto convertToDto(Language lang) {
         LanguageDto result = new LanguageDto();
         result.setId(lang.getId());
         result.setName(lang.getName());

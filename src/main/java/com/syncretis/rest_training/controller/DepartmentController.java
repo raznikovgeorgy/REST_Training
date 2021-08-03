@@ -13,32 +13,33 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @RestController
+@RequestMapping("/api/departments")
 public class DepartmentController {
 
     private final DepartmentService service;
 
-    @GetMapping("/departments")
+    @GetMapping("")
     @ResponseBody
     public List<DepartmentDto> all() {
         return service.findAll();
     }
 
-    @PostMapping("/departments")
+    @PostMapping("")
     DepartmentDto newDepartment(@Valid @RequestBody DepartmentDto newDepartment) {
         return service.save(newDepartment);
     }
 
-    @GetMapping("/departments/{id}")
+    @GetMapping("{id}")
     DepartmentDto one(@PathVariable @Min(1) Long id) {
         return service.get(id);
     }
 
-    @PutMapping("/departments/{id}")
+    @PutMapping("{id}")
     DepartmentDto replaceDepartment( @Valid @RequestBody DepartmentDto newDepartment, @PathVariable @Min(1) Long id) {
         return service.update(id, newDepartment);
     }
 
-    @DeleteMapping("/departments/{id}")
+    @DeleteMapping("{id}")
     void deleteDepartment(@PathVariable @Min(1) Long id) {
         service.delete(id);
     }

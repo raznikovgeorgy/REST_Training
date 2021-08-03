@@ -2,7 +2,6 @@ package com.syncretis.rest_training.service;
 
 import com.syncretis.rest_training.dto.DepartmentDto;
 import com.syncretis.rest_training.exception.DepartmentNotFoundException;
-import com.syncretis.rest_training.exception.personException.PersonNotFoundException;
 import com.syncretis.rest_training.mapper.DepartmentMapper;
 import com.syncretis.rest_training.model.Department;
 import com.syncretis.rest_training.repository.DepartmentRepository;
@@ -25,7 +24,7 @@ public class DepartmentService {
     private DepartmentMapper departmentMapper;
 
     public void delete(@Min(1) Long id) {
-        if (id == null || isExist(id)) {
+        if (id == null || !isExist(id)) {
             throw new DepartmentNotFoundException(id);
         } else {
             departmentRepository.deleteById(id);
@@ -54,14 +53,14 @@ public class DepartmentService {
     }
 
     public DepartmentDto convertToDto(Department d) {
-        return departmentMapper.convert(d);
+        return departmentMapper.convertToDto(d);
     }
 
     public Department convertToEntity(DepartmentDto departmentDto) {
-        return departmentMapper.convert(departmentDto);
+        return departmentMapper.convertToEntity(departmentDto);
     }
 
-    public boolean isExist(Long id) {
+    private boolean isExist(Long id) {
         return departmentRepository.existsById(id);
     }
 

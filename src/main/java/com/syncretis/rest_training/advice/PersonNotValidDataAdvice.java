@@ -1,6 +1,6 @@
 package com.syncretis.rest_training.advice;
 
-import com.syncretis.rest_training.exception.personException.PersonNotValidDataException;
+import com.syncretis.rest_training.exception.person.PersonNotValidDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

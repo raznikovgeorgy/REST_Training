@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
@@ -16,6 +14,22 @@ import javax.validation.constraints.Pattern;
 @Setter
 public class DepartmentDto {
     private Long id;
-    @NotBlank (message = "name is mandatory")
+    @NotBlank(message = "name is mandatory")
     private String name;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DepartmentDto that = (DepartmentDto) o;
+        return id.equals(that.id) && name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result *= 37 + Objects.hashCode(id);
+        result *= 37 + Objects.hashCode(name);
+        return result;
+    }
 }

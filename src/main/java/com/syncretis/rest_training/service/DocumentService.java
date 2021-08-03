@@ -1,7 +1,6 @@
 package com.syncretis.rest_training.service;
 
 import com.syncretis.rest_training.dto.DocumentDto;
-import com.syncretis.rest_training.exception.DepartmentNotFoundException;
 import com.syncretis.rest_training.exception.DocumentNotFoundException;
 import com.syncretis.rest_training.mapper.DocumentMapper;
 import com.syncretis.rest_training.model.Document;
@@ -25,7 +24,7 @@ public class DocumentService {
     private DocumentMapper documentMapper;
 
     public void delete(@Pattern(regexp = "[A-Za-z0-9]{32}") String id) {
-        if (id == null || isExist(id)) {
+        if (id == null || !isExist(id)) {
             throw new DocumentNotFoundException(id);
         } else {
             documentRepository.deleteById(id);
@@ -53,11 +52,11 @@ public class DocumentService {
     }
 
     public DocumentDto convertToDto(Document document) {
-        return documentMapper.convert(document);
+        return documentMapper.convertToDto(document);
     }
 
     public Document convertToEntity(DocumentDto dto) {
-        return documentMapper.convert(dto);
+        return documentMapper.convertToEntity(dto);
     }
 
     public boolean isExist(String id) {

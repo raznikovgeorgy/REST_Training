@@ -1,7 +1,6 @@
 package com.syncretis.rest_training.controller;
 
 import com.syncretis.rest_training.dto.PersonDto;
-import com.syncretis.rest_training.exception.personException.PersonNotValidDataException;
 import com.syncretis.rest_training.service.PersonService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -14,18 +13,19 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @RestController
+@RequestMapping("/api/persons")
 public class PersonController {
 
     private final PersonService service;
 
-    @GetMapping("/persons")
+    @GetMapping("")
     @ResponseBody
     public List<PersonDto> all() {
         return service.findAll();
     }
 
     //if you want single save instead batch save, just uncomment this method and comment method down below
-    @PostMapping("/persons")
+    @PostMapping("")
     PersonDto newDocument(@Valid @RequestBody PersonDto newPerson) {
         return service.save(newPerson);
     }
@@ -35,22 +35,22 @@ public class PersonController {
 //        return service.saveAll(newPersons);
 //    }
 
-    @GetMapping("/persons/{id}")
+    @GetMapping("/{id}")
     PersonDto one(@PathVariable @Min(1) Long id) {
         return service.get(id);
     }
 
-    @PutMapping("/persons/{id}")
+    @PutMapping("/{id}")
     PersonDto replaceDocument(@Valid @RequestBody PersonDto newPerson, @PathVariable @Min(1) Long id) {
         return service.update(id, newPerson);
     }
 
-    @DeleteMapping("/persons/{id}")
+    @DeleteMapping("/{id}")
     void deleteDocument(@PathVariable @Min(1) Long id) {
         service.delete(id);
     }
 
-    @DeleteMapping("/persons")
+    @DeleteMapping("")
     void deleteDocuments(@RequestBody List<PersonDto> personsToDelete) {
         service.deleteAll(personsToDelete);
     }

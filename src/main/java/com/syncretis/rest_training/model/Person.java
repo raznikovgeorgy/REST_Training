@@ -5,9 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -84,5 +88,29 @@ public class Person {
         this.department = department;
         this.languages = languages;
         this.document = document;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id.equals(person.id) && name.equals(person.name) &&
+                surname.equals(person.surname) && birthday.equals(person.birthday) &&
+                department.equals(person.department) && languages.equals(person.languages) &&
+                document.equals(person.document);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        result *= 37 + Objects.hashCode(id);
+        result *= 37 + Objects.hashCode(name);
+        result *= 37 + Objects.hashCode(surname);
+        result *= 37 + Objects.hashCode(birthday);
+        result *= 37 + department.hashCode();
+        result *= 37 + languages.hashCode();
+        result *= 37 + document.hashCode();
+        return result;
     }
 }

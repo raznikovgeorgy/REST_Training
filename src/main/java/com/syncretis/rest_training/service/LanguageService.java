@@ -1,7 +1,6 @@
 package com.syncretis.rest_training.service;
 
 import com.syncretis.rest_training.dto.LanguageDto;
-import com.syncretis.rest_training.exception.DepartmentNotFoundException;
 import com.syncretis.rest_training.exception.LanguageNotFoundException;
 import com.syncretis.rest_training.mapper.LanguageMapper;
 import com.syncretis.rest_training.model.Language;
@@ -25,7 +24,7 @@ public class LanguageService {
     private LanguageMapper languageMapper;
 
     public void delete(@Min(1) Long id) {
-        if (id == null || isExist(id)) {
+        if (id == null || !isExist(id)) {
             throw new LanguageNotFoundException(id);
         } else {
             languageRepository.deleteById(id);
@@ -48,17 +47,17 @@ public class LanguageService {
         return convertToDto(languageRepository.save(convertToEntity(dto)));
     }
 
-    public LanguageDto update(@Min(1)Long id, @Valid LanguageDto dto) {
+    public LanguageDto update(@Min(1) Long id, @Valid LanguageDto dto) {
         dto.setId(id);
         return convertToDto(languageRepository.save(convertToEntity(dto)));
     }
 
     public LanguageDto convertToDto(Language l) {
-        return languageMapper.convert(l);
+        return languageMapper.convertToDto(l);
     }
 
     public Language convertToEntity(LanguageDto dto) {
-        return languageMapper.convert(dto);
+        return languageMapper.convertToEntity(dto);
     }
 
     public boolean isExist(Long id) {
