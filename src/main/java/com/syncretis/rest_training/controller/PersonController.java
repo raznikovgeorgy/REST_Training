@@ -19,9 +19,17 @@ public class PersonController {
         return service.findAll();
     }
 
+    //if you want single save instead batch save, just uncomment this method and comment method down below
+//    @PostMapping("/persons")
+//    PersonDto newDocument(@RequestBody PersonDto newPerson) {
+//        if (newPerson.getName() == null)
+//            throw new PersonNotValidDataException();
+//        return service.save(newPerson);
+//    }
+
     @PostMapping("/persons")
-    PersonDto newDocument(@RequestBody PersonDto newPerson) {
-        return service.save(newPerson);
+    List<PersonDto> newDocuments(@RequestBody List<PersonDto> newPersons) {
+        return service.saveAll(newPersons);
     }
 
     @GetMapping("/persons/{id}")
@@ -37,5 +45,10 @@ public class PersonController {
     @DeleteMapping("/persons/{id}")
     void deleteDocument(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @DeleteMapping("/persons")
+    void deleteDocuments(@RequestBody List<PersonDto> personsToDelete) {
+        service.deleteAll(personsToDelete);
     }
 }
