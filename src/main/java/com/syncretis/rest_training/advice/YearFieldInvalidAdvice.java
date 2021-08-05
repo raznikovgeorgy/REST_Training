@@ -1,6 +1,6 @@
 package com.syncretis.rest_training.advice;
 
-import com.syncretis.rest_training.exception.personException.PersonNotValidDataException;
+import com.syncretis.rest_training.exception.personException.YearBirthdayInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class PersonNotValidDataAdvice {
+public class YearFieldInvalidAdvice {
     @ResponseBody
-    @ExceptionHandler(PersonNotValidDataException.class)
+    @ExceptionHandler(YearBirthdayInvalidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String personNotValidDataAdvice(PersonNotValidDataException e) {
+    String invalidYearBirthday(YearBirthdayInvalidException e) {
         return e.getMessage();
     }
 }

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -20,12 +21,12 @@ import java.util.List;
 )
 @NoArgsConstructor
 public class Department {
-
+    @DecimalMin("1")
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
+    @NotNull
     @Column(name = "name", nullable = false)
     @NotNull(message = "Department Name cannot be null")
     private String name;

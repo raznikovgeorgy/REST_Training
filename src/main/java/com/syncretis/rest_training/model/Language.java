@@ -3,6 +3,7 @@ package com.syncretis.rest_training.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -20,12 +21,11 @@ import java.util.List;
 )
 @ToString
 public class Language {
-
+    @DecimalMin("1")
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
     @Column(name = "name")
     @NotNull
     private String name;

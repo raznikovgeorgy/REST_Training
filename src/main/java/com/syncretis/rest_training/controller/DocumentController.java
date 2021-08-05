@@ -3,10 +3,13 @@ package com.syncretis.rest_training.controller;
 import com.syncretis.rest_training.dto.DocumentDto;
 import com.syncretis.rest_training.service.DocumentService;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @AllArgsConstructor
 @RestController
 public class DocumentController {
@@ -20,22 +23,22 @@ public class DocumentController {
     }
 
     @PostMapping("/documents")
-    DocumentDto newDocument(@RequestBody DocumentDto newDocument) {
+    DocumentDto newDocument(@Valid @RequestBody DocumentDto newDocument) {
         return service.save(newDocument);
     }
 
     @GetMapping("/documents/{id}")
-    DocumentDto one(@PathVariable String id) {
+    DocumentDto one(@Valid @PathVariable String id) {
         return service.get(id);
     }
 
     @PutMapping("/documents/{id}")
-    DocumentDto replaceDocument(@RequestBody DocumentDto newDocument, @PathVariable String id) {
+    DocumentDto replaceDocument(@Valid @RequestBody DocumentDto newDocument, @Valid @PathVariable String id) {
         return service.update(id, newDocument);
     }
 
     @DeleteMapping("/documents/{id}")
-    void deleteDocument(@PathVariable String id) {
+    void deleteDocument(@Valid @PathVariable String id) {
         service.delete(id);
     }
 }
