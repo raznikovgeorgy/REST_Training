@@ -1,4 +1,4 @@
-package com.syncretis.rest_training.exception;
+package com.syncretis.rest_training.exception.personException;
 
 public class PersonNotValidDataException extends RuntimeException {
 

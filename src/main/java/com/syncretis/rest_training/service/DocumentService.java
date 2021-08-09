@@ -1,6 +1,5 @@
 package com.syncretis.rest_training.service;
 
-import com.syncretis.rest_training.dto.DepartmentDto;
 import com.syncretis.rest_training.dto.DocumentDto;
 import com.syncretis.rest_training.exception.DepartmentNotFoundException;
 import com.syncretis.rest_training.exception.DocumentNotFoundException;
@@ -9,10 +8,14 @@ import com.syncretis.rest_training.model.Document;
 import com.syncretis.rest_training.repository.DocumentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Validated
 @Service
 @AllArgsConstructor
 public class DocumentService {
@@ -21,8 +24,10 @@ public class DocumentService {
 
     private DocumentMapper documentMapper;
 
-    public void delete(String id) {
-        if (id != null) {
+    public void delete(@Pattern(regexp = "[A-Za-z0-9]{32}") String id) {
+        if (id == null || isExist(id)) {
+            throw new DocumentNotFoundException(id);
+        } else {
             documentRepository.deleteById(id);
         }
     }
@@ -33,16 +38,16 @@ public class DocumentService {
                 .collect(Collectors.toList());
     }
 
-    public DocumentDto get(String id) {
+    public DocumentDto get(@Pattern(regexp = "[A-Za-z0-9]{32}") String id) {
         return convertToDto(documentRepository.findById(id)
                 .orElseThrow(() -> new DocumentNotFoundException(id)));
     }
 
-    public DocumentDto save(DocumentDto dto) {
+    public DocumentDto save(@Valid DocumentDto dto) {
         return convertToDto(documentRepository.save(convertToEntity(dto)));
     }
 
-    public DocumentDto update(String id, DocumentDto dto) {
+    public DocumentDto update(@Pattern(regexp = "[A-Za-z0-9]{32}") String id, @Valid DocumentDto dto) {
         dto.setId(id);
         return convertToDto(documentRepository.save(convertToEntity(dto)));
     }
@@ -53,5 +58,9 @@ public class DocumentService {
 
     public Document convertToEntity(DocumentDto dto) {
         return documentMapper.convert(dto);
+    }
+
+    public boolean isExist(String id) {
+        return documentRepository.existsById(id);
     }
 }

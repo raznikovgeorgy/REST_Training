@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,6 +33,7 @@ public class Person {
                 '}';
     }
 
+
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -42,15 +42,18 @@ public class Person {
     @Column(name = "name", nullable = false)
     @NotNull(message = "Name cannot be null")
     @Size(max = 100)
+    @Pattern(regexp = "^[A-Za-z]*$")
     private String name;
 
     @Column(name = "surname", nullable = false)
     @NotNull(message = "Surname cannot be null")
     @Size(max = 100)
+    @Pattern(regexp = "^[A-Za-z]*$")
     private String surname;
 
     @Column(name = "birthday", nullable = false)
     @NotNull(message = "Birthday cannot be null")
+    @PastOrPresent
     private LocalDate birthday;
 
     @ManyToOne
