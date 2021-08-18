@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class PersonService {
-
     private PersonRepository personRepository;
     private PersonMapper personMapper;
     private PersonValidator validator;
@@ -38,7 +37,7 @@ public class PersonService {
             if (dto.getId() != null && !isExist(dto.getId()))
                 throw new PersonNotFoundException(dto.getId(), "\nOperation was aborted");
         }
-        personRepository.deleteAllInBatch(list.stream()
+        personRepository.deleteInBatch(list.stream()
                 .map(this::convertToEntity)
                 .collect(Collectors.toList()));
     }

@@ -8,7 +8,6 @@ import com.syncretis.rest_training.model.Language;
 import com.syncretis.rest_training.model.Person;
 import com.syncretis.rest_training.repository.PersonRepository;
 import com.syncretis.rest_training.validation.personDtoValidation.PersonValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,41 +31,30 @@ class PersonServiceTest {
     private PersonValidator personValidator;
     @InjectMocks
     private PersonService service;
-    private final Long id = 1L;
-    private final Long anotherId = 2L;
-    private final Language language = new Language("RU");
-    private final List<Language> languageList = List.of(language);
-    private final String name = "Georgy";
-    private final String surname = "Raznikov";
-    private final String anotherName = "Amir";
-    private final String anotherSurname = "Kadyrov";
-    private final String docId = "3as7fasd8fsda6fds6a8f53sa7";
-    private final String anotherDocId = "jty8u6s7l343k8672g876jk";
-    private final String depName = "Department of Ukrainian cybersecurity";
-    private final LocalDate birthday = LocalDate.of(1997, 3, 12);
-    private final LocalDate docDate = LocalDate.of(2077, 1, 1);
-    private final Department department = new Department(id, depName);
-    private final Document document = new Document(docId, docDate);
-    private final Document anotherDocument = new Document(anotherDocId, LocalDate.of(2133, 1, 1));
-    private final Person entity = new Person(name, surname, birthday, department, languageList, document);
-    private final Person anotherEntity = new Person(anotherName, anotherSurname,
-            LocalDate.of(1997, 4, 16), department, List.of(language), anotherDocument);
-    private final List<Long> idList = List.of(id);
-    private final PersonDto dto = new PersonDto(id, name, surname, birthday, id, docId, idList);
-    private final PersonDto anotherDto = new PersonDto(anotherId, anotherName, anotherSurname, LocalDate.of(1997, 4, 16), id, anotherDocId, List.of(id));
-    private final List<PersonDto> dtoList = List.of(dto, anotherDto);
-    private final List<Person> entityList = List.of(entity, anotherEntity);
 
-    @BeforeEach
-    void setUp() {
-        language.setId(id);
-        entity.setId(id);
-        anotherEntity.setId(anotherId);
-    }
+    private final static Long id = 1L;
+    private final static Long anotherId = 2L;
+    private final static String name = "Georgy";
+    private final static String surname = "Raznikov";
+    private final static String anotherName = "Amir";
+    private final static String anotherSurname = "Kadyrov";
+    private final static String docId = "3as7fasd8fsda6fds6a8f53sa7";
+    private final static String anotherDocId = "jty8u6s7l343k8672g876jk";
+    private final static String depName = "Department of Ukrainian cybersecurity";
+    private final static LocalDate birthday = LocalDate.of(1997, 3, 12);
+    private final static LocalDate docDate = LocalDate.of(2077, 1, 1);
+
+    private Person entity;
+    private Person anotherEntity;
+    private PersonDto dto;
+    private PersonDto anotherDto;
+    private List<PersonDto> dtoList;
+    private List<Person> entityList;
 
     @Test
     void shouldDeleteEntityFromDb() {
         //GIVEN
+        initializeData();
         when(personRepository.existsById(id)).thenReturn(true);
         //WHEN
         service.delete(id);
@@ -77,13 +65,14 @@ class PersonServiceTest {
     @Test
     void shouldDeleteAllEntitiesContainingInDb() {
         //GIVEN
+        initializeData();
         when(service.convertToEntity(dto)).thenReturn(entity);
         when(service.convertToEntity(anotherDto)).thenReturn(anotherEntity);
         when(personRepository.existsById(any(Long.class))).thenReturn(true);
         //WHEN
         service.deleteAll(dtoList);
         //THEN
-        verify(personRepository).deleteAllInBatch(entityList);
+        verify(personRepository).deleteInBatch(entityList);
         verify(personMapper, times(2)).convertToEntity(any(PersonDto.class));
         verify(personRepository, times(2)).existsById(any(Long.class));
     }
@@ -91,6 +80,7 @@ class PersonServiceTest {
     @Test
     void shouldReturnAllEntitiesFromDb() {
         //GIVEN
+        initializeData();
         when(personRepository.findAllByOrderByIdAsc()).thenReturn(entityList);
         when(personMapper.convertToDto(entity)).thenReturn(dto);
         when(personMapper.convertToDto(anotherEntity)).thenReturn(anotherDto);
@@ -105,6 +95,7 @@ class PersonServiceTest {
     @Test
     void shouldReturnAnEntityById() {
         //GIVEN
+        initializeData();
         when(personRepository.findById(id)).thenReturn(Optional.of(entity));
         when(personMapper.convertToDto(entity)).thenReturn(dto);
         //WHEN
@@ -118,6 +109,7 @@ class PersonServiceTest {
     @Test
     void shouldSaveAnEntityToDb() {
         //GIVEN
+        initializeData();
         when(personRepository.save(entity)).thenReturn(entity);
         when(personMapper.convertToDto(entity)).thenReturn(dto);
         when(personMapper.convertToEntity(dto)).thenReturn(entity);
@@ -133,6 +125,7 @@ class PersonServiceTest {
     @Test
     void shouldSaveAllGivenEntities() {
         //GIVEN
+        initializeData();
         when(personMapper.convertToEntity(dto)).thenReturn(entity);
         when(personMapper.convertToEntity(anotherDto)).thenReturn(anotherEntity);
         when(personRepository.saveAll(entityList)).thenReturn(entityList);
@@ -150,6 +143,7 @@ class PersonServiceTest {
     @Test
     void shouldUpdateAnEntityInDb() {
         //GIVEN
+        initializeData();
         when(personValidator.validate(anotherDto)).thenReturn(true);
         when(personMapper.convertToEntity(anotherDto)).thenReturn(anotherEntity);
         when(personMapper.convertToDto(anotherEntity)).thenReturn(anotherDto);
@@ -165,8 +159,8 @@ class PersonServiceTest {
 
     @Test
     void shouldConvertAnEntityToDto() {
-
         //GIVEN
+        initializeData();
         when(personMapper.convertToDto(entity)).thenReturn(dto);
         //WHEN
         PersonDto actual = service.convertToDto(entity);
@@ -178,11 +172,31 @@ class PersonServiceTest {
     @Test
     void shouldConvertDtoToEntity() {
         //GIVEN
+        initializeData();
         when(personMapper.convertToEntity(dto)).thenReturn(entity);
         //WHEN
         Person actual = service.convertToEntity(dto);
         //THEN
         verify(personMapper).convertToEntity(dto);
         assertThat(actual).isEqualTo(entity);
+    }
+
+    private void initializeData() {
+        Language language = new Language("RU");
+        List<Language> languageList = List.of(language);
+        Department department = new Department(id, depName);
+        Document document = new Document(docId, docDate);
+        Document anotherDocument = new Document(anotherDocId, LocalDate.of(2133, 1, 1));
+        entity = new Person(name, surname, birthday, department, languageList, document);
+        anotherEntity = new Person(anotherName, anotherSurname,
+                LocalDate.of(1997, 4, 16), department, List.of(language), anotherDocument);
+        List<Long> idList = List.of(id);
+        dto = new PersonDto(id, name, surname, birthday, id, docId, idList);
+        anotherDto = new PersonDto(anotherId, anotherName, anotherSurname, LocalDate.of(1997, 4, 16), id, anotherDocId, List.of(id));
+        dtoList = List.of(dto, anotherDto);
+        entityList = List.of(entity, anotherEntity);
+        language.setId(id);
+        entity.setId(id);
+        anotherEntity.setId(anotherId);
     }
 }

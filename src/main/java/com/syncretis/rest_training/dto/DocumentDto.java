@@ -15,7 +15,6 @@ import java.util.Objects;
 @Setter
 public class DocumentDto {
     private String id;
-
     @NotNull(message = "expireDate is mandatory")
     private LocalDate expireDate;
 

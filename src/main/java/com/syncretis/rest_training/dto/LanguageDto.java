@@ -14,7 +14,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @Setter
 public class LanguageDto {
-
     private Long id;
     @NotBlank(message = "name is mandatory")
     @Pattern(regexp = "^[A-Za-z]*$")

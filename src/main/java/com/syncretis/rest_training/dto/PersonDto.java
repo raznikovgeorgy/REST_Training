@@ -13,7 +13,6 @@ import java.util.Objects;
 @Setter
 @ToString
 public class PersonDto {
-
     private Long id;
     @NotBlank(message = "name is mandatory")
     @Size(max = 100)

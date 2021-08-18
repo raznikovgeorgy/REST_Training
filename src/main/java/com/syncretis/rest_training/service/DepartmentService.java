@@ -18,9 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class DepartmentService {
-
     private DepartmentRepository departmentRepository;
-
     private DepartmentMapper departmentMapper;
 
     public void delete(@Min(1) Long id) {

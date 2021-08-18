@@ -15,7 +15,6 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class PersonMapper {
-
     private DepartmentService departmentService;
     private DocumentService documentService;
     private LanguageService languageService;

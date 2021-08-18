@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DocumentMapper {
-
     public Document convertToEntity(DocumentDto dto) {
         Document result = new Document();
         result.setId(dto.getId());

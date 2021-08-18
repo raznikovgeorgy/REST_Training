@@ -1,23 +1,30 @@
 package com.syncretis.rest_training.validation.personDtoValidation;
 
 import com.syncretis.rest_training.dto.PersonDto;
-import com.syncretis.rest_training.model.Language;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class PersonValidatorTest {
-    private final YearBirthdayValidator yearBirthdayValidator = new YearBirthdayValidator();
-    private final PersonValidator validator = new PersonValidator(yearBirthdayValidator);
+    @Spy
+    private YearBirthdayValidator yearBirthdayValidator;
+    @InjectMocks
+    private PersonValidator validator;
 
     @Test
     void validate() {
         //GIVEN
         Long id = 1L;
-        Language language = new Language("RU");
         String name = "Georgy";
         String surname = "Raznikov";
         String docId = "3as7fasd8fsda6fds6a8f53sa7";
@@ -27,6 +34,7 @@ class PersonValidatorTest {
         //WHEN
         boolean actual = validator.validate(dto);
         //THEN
+        verify(yearBirthdayValidator).validate(any(), any());
         assertThat(actual).isEqualTo(true);
     }
 }

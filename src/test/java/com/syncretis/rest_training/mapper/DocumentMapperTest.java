@@ -9,9 +9,8 @@ import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DocumentMapperTest {
-
-    private final String id = "hv62eryjmyl6j4ds36a24t64l26s5ag426";
-    private final LocalDate date = LocalDate.of(2077, 1, 1);
+    private final static String id = "hv62eryjmyl6j4ds36a24t64l26s5ag426";
+    private final static LocalDate date = LocalDate.of(2077, 1, 1);
     private final DocumentMapper documentMapper = new DocumentMapper();
 
     @Test

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DepartmentMapperTest {
-    private final Long id = 1L;
-    private final String name = "Department of Good Music";
+    private final static Long id = 1L;
+    private final static String name = "Department of Good Music";
     private final DepartmentMapper departmentMapper = new DepartmentMapper();
 
     @Test

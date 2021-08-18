@@ -18,9 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class DocumentService {
-
     private DocumentRepository documentRepository;
-
     private DocumentMapper documentMapper;
 
     public void delete(@Pattern(regexp = "[A-Za-z0-9]{32}") String id) {

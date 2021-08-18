@@ -19,7 +19,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DepartmentServiceTest {
-
     @Mock
     private DepartmentRepository departmentRepository;
     @Mock
@@ -27,10 +26,10 @@ class DepartmentServiceTest {
     @InjectMocks
     private DepartmentService service;
 
-    private final Long id = 1L;
-    private final String depName = "Department of Good Music";
-    private final Department entity = new Department(id, "Department of Good Music");
-    private final DepartmentDto dto = new DepartmentDto(id, "Department of Good Music");
+    private Department entity;
+    private DepartmentDto dto;
+    private final static Long id = 1L;
+    private final static String depName = "Department of Good Music";
 
     @Test
     void shouldDeleteEntityFromDb() {
@@ -46,6 +45,7 @@ class DepartmentServiceTest {
     @Test
     void shouldGiveAllEntitiesContainingInDb() {
         //GIVEN
+        initializeData();
         List<Department> entityList = new ArrayList<>();
         List<DepartmentDto> expected = new ArrayList<>();
         entityList.add(entity);
@@ -68,6 +68,7 @@ class DepartmentServiceTest {
     @Test
     void shouldGiveEntityFromDbById() {
         //GIVEN
+        initializeData();
         DepartmentDto expected = new DepartmentDto(id, depName);
         when(departmentMapper.convertToDto(entity)).thenReturn(dto);
         when(departmentRepository.findById(id)).thenReturn(Optional.of(entity));
@@ -82,6 +83,7 @@ class DepartmentServiceTest {
     @Test
     void shouldSaveEntityInDb() {
         //GIVEN
+        initializeData();
         DepartmentDto expected = new DepartmentDto(id, depName);
         when(departmentRepository.save(entity)).thenReturn(entity);
         when(departmentMapper.convertToDto(entity)).thenReturn(dto);
@@ -98,6 +100,7 @@ class DepartmentServiceTest {
     @Test
     void shouldUpdateEntityDataInDb() {
         //GIVEN
+        initializeData();
         DepartmentDto updatedDto = new DepartmentDto();
         String newDepName = "Department of Good Music";
         updatedDto.setName(newDepName);
@@ -116,6 +119,8 @@ class DepartmentServiceTest {
 
     @Test
     void shouldConvertEntityToDto() {
+        //GIVEN
+        initializeData();
         //WHEN
         when(departmentMapper.convertToDto(entity)).thenReturn(dto);
         DepartmentDto actual = service.convertToDto(entity);
@@ -126,11 +131,18 @@ class DepartmentServiceTest {
 
     @Test
     void shouldConvertDtoToEntity() {
+        //GIVEN
+        initializeData();
         //WHEN
         when(departmentMapper.convertToEntity(dto)).thenReturn(entity);
         Department actual = service.convertToEntity(dto);
         //THEN
         verify(departmentMapper).convertToEntity(dto);
         assertThat(actual).isEqualTo(entity);
+    }
+
+    private void initializeData() {
+        entity = new Department(id, depName);
+        dto = new DepartmentDto(id, depName);
     }
 }

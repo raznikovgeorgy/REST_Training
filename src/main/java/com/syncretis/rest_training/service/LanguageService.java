@@ -18,9 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Service
 public class LanguageService {
-
     private LanguageRepository languageRepository;
-
     private LanguageMapper languageMapper;
 
     public void delete(@Min(1) Long id) {
