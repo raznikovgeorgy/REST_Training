@@ -26,10 +26,10 @@ class DocumentServiceTest {
     private DocumentMapper documentMapper;
     @InjectMocks
     private DocumentService service;
-    private final String id = "y8h647b8f64b7fh874nfg3nh4f";
-    private final LocalDate date = LocalDate.of(2077, 1, 1);
-    private final Document entity = new Document(id, date);
-    private final DocumentDto dto = new DocumentDto(id, date);
+    private final static String id = "y8h647b8f64b7fh874nfg3nh4f";
+    private final static LocalDate date = LocalDate.of(2077, 1, 1);
+    private Document entity;
+    private DocumentDto dto;
 
     @Test
     void shouldDeleteEntityFromDb() {
@@ -44,6 +44,7 @@ class DocumentServiceTest {
     @Test
     void shouldGiveAllEntitiesContainingInDb() {
         //GIVEN
+        initializeSata();
         List<Document> entityList = new ArrayList<>();
         List<DocumentDto> expected = new ArrayList<>();
         entityList.add(entity);
@@ -65,6 +66,7 @@ class DocumentServiceTest {
     @Test
     void shouldGiveEntityFromDbById() {
         //GIVEN
+        initializeSata();
         DocumentDto expected = new DocumentDto(id, date);
         when(documentMapper.convertToDto(entity)).thenReturn(dto);
         when(documentRepository.findById(id)).thenReturn(Optional.of(entity));
@@ -79,6 +81,7 @@ class DocumentServiceTest {
     @Test
     void shouldSaveEntityInDb() {
         //GIVEN
+        initializeSata();
         DocumentDto expected = new DocumentDto(id, date);
         when(documentRepository.save(entity)).thenReturn(entity);
         when(documentMapper.convertToDto(entity)).thenReturn(dto);
@@ -95,6 +98,7 @@ class DocumentServiceTest {
     @Test
     void shouldUpdateEntityDataInDb() {
         //GIVEN
+        initializeSata();
         DocumentDto updatedDto = new DocumentDto();
         updatedDto.setExpireDate(date);
         Document updatedEntity = new Document(id, date);
@@ -113,6 +117,7 @@ class DocumentServiceTest {
     @Test
     void shouldConvertEntityToDto() {
         //GIVEN
+        initializeSata();
         when(documentMapper.convertToDto(entity)).thenReturn(dto);
         //WHEN
         DocumentDto actual = service.convertToDto(entity);
@@ -124,6 +129,7 @@ class DocumentServiceTest {
     @Test
     void shouldConvertDtoToEntity() {
         //GIVEN
+        initializeSata();
         when(documentMapper.convertToEntity(dto)).thenReturn(entity);
         //WHEN
         Document actual = service.convertToEntity(dto);
@@ -141,5 +147,10 @@ class DocumentServiceTest {
         //THEN
         verify(documentRepository).existsById(id);
         assertThat(actual).isEqualTo(true);
+    }
+
+    private void initializeSata() {
+        entity = new Document(id, date);
+        dto = new DocumentDto(id, date);
     }
 }

@@ -38,7 +38,7 @@ public class PersonService {
             if (dto.getId() != null && !isExist(dto.getId()))
                 throw new PersonNotFoundException(dto.getId(), "\nOperation was aborted");
         }
-        personRepository.deleteAllInBatch(list.stream()
+        personRepository.deleteInBatch(list.stream()
                 .map(this::convertToEntity)
                 .collect(Collectors.toList()));
     }
