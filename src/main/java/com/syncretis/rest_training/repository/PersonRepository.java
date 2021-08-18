@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findAllByOrderByIdAsc();
+
+    void deleteAllInBatch(List<Person> collect);
 }

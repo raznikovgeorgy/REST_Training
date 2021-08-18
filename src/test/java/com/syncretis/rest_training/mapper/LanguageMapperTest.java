@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LanguageMapperTest {
-    private final String name = "RU";
-    private final Long id = 1L;
+    private final static Long id = 1L;
+    private final static String name = "RU";
     private final LanguageMapper languageMapper = new LanguageMapper();
 
     @Test

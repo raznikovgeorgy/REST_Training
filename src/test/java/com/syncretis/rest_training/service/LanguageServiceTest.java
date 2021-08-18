@@ -4,7 +4,6 @@ import com.syncretis.rest_training.dto.LanguageDto;
 import com.syncretis.rest_training.mapper.LanguageMapper;
 import com.syncretis.rest_training.model.Language;
 import com.syncretis.rest_training.repository.LanguageRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,13 +25,10 @@ class LanguageServiceTest {
     private LanguageMapper languageMapper;
     @InjectMocks
     private LanguageService service;
-    private final Long id = 1L;
-    private final Language entity = new Language("RU");
-    private final LanguageDto dto = new LanguageDto(id, "RU");
-
-    @BeforeEach
-    void setUp() {
-    }
+    private final static Long id = 1L;
+    private final static String name = "RU";
+    private Language entity;
+    private LanguageDto dto;
 
     @Test
     void shouldDeleteEntityFromDb() {
@@ -47,6 +43,7 @@ class LanguageServiceTest {
     @Test
     void shouldGiveAllEntitiesContainingInDb() {
         //GIVEN
+        initializeData();
         List<Language> entityList = new ArrayList<>();
         List<LanguageDto> expected = new ArrayList<>();
         entityList.add(entity);
@@ -68,6 +65,7 @@ class LanguageServiceTest {
     @Test
     void shouldGiveEntityFromDbById() {
         //GIVEN
+        initializeData();
         when(languageMapper.convertToDto(entity)).thenReturn(dto);
         when(languageRepository.findById(id)).thenReturn(Optional.of(entity));
         LanguageDto expected = new LanguageDto(id, "RU");
@@ -82,6 +80,7 @@ class LanguageServiceTest {
     @Test
     void shouldSaveEntityInDb() {
         //GIVEN
+        initializeData();
         LanguageDto expected = new LanguageDto(id, "RU");
         when(languageRepository.save(entity)).thenReturn(entity);
         when(languageMapper.convertToDto(entity)).thenReturn(dto);
@@ -98,6 +97,7 @@ class LanguageServiceTest {
     @Test
     void shouldUpdateEntityDataInDb() {
         //GIVEN
+        initializeData();
         LanguageDto updatedDto = new LanguageDto();
         updatedDto.setName("RU");
         Language updatedEntity = new Language("RU");
@@ -117,6 +117,7 @@ class LanguageServiceTest {
     @Test
     void shouldConvertEntityToDto() {
         //GIVEN
+        initializeData();
         when(languageMapper.convertToDto(entity)).thenReturn(dto);
         //WHEN
         LanguageDto actual = service.convertToDto(entity);
@@ -128,6 +129,7 @@ class LanguageServiceTest {
     @Test
     void shouldConvertDtoToEntity() {
         //GIVEN
+        initializeData();
         when(languageMapper.convertToEntity(dto)).thenReturn(entity);
         //WHEN
         Language actual = service.convertToEntity(dto);
@@ -145,5 +147,10 @@ class LanguageServiceTest {
         //THEN
         verify(languageRepository).existsById(id);
         assertThat(actual).isEqualTo(true);
+    }
+
+    private void initializeData() {
+        entity = new Language(name);
+        dto = new LanguageDto(id, name);
     }
 }

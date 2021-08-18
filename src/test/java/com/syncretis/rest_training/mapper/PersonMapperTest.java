@@ -35,17 +35,17 @@ class PersonMapperTest {
     @InjectMocks
     private PersonMapper mapper;
 
-    private PersonDto dto;
+    private final static Long id = 1L;
+    private final static String languageName = "RU";
+    private final static String docId = "3as7fasd8fsda6fds6a8f53sa7";
+    private final static String depName = "Department of Ukrainian cybersecurity";
+    private final static LocalDate birthday = LocalDate.of(1997, 3, 12);
+    private final static LocalDate docDate = LocalDate.of(2077, 1, 1);
     private Person entity;
-    private final Long id = 1L;
-    private final String languageName = "RU";
-    private final String docId = "3as7fasd8fsda6fds6a8f53sa7";
-    private final String depName = "Department of Ukrainian cybersecurity";
-    private final LocalDate birthday = LocalDate.of(1997, 3, 12);
-    private final LocalDate docDate = LocalDate.of(2077, 1, 1);
-    private final Language language = new Language(languageName);
-    private final Document document = new Document(docId, docDate);
-    private final Department department = new Department(id, depName);
+    private PersonDto dto;
+    private Language language;
+    private Document document;
+    private Department department;
 
     @Test
     void shouldConvertDtoToEntity() {
@@ -86,6 +86,9 @@ class PersonMapperTest {
     }
 
     void initializeData() {
+        department = new Department(id, depName);
+        document = new Document(docId, docDate);
+        language = new Language(languageName);
         language.setId(id);
         List<Language> languageList = List.of(language);
         List<Long> idList = List.of(id);
